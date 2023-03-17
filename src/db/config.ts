@@ -16,6 +16,7 @@ export function dbConfig(): TypeOrmModuleAsyncOptions {
       password: config.get('DB_PASSWORD'),
       entities: [UserEntity, ReportEntity],
       logging: true,
+      logger: 'file',
     }),
   };
 }

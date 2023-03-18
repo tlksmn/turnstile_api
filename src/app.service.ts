@@ -5,8 +5,12 @@ import { CoreService } from './common/core.service';
 @Injectable()
 export class AppService {
   constructor(private readonly coreService: CoreService) {}
-  @Cron(CronExpression.EVERY_MINUTE)
-  getDataFromPerco() {
+
+  @Cron(CronExpression.EVERY_10_SECONDS)
+  async getDataFromPerco() {
+    const temp = await this.coreService.getData();
+    console.log(temp);
+    console.log(await temp.text());
     console.log('should fetch data from perco', new Date().toISOString());
   }
 

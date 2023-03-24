@@ -17,6 +17,8 @@ export function dbConfig(): TypeOrmModuleAsyncOptions {
       entities: [UserEntity, ReportEntity],
       logging: true,
       logger: 'file',
+      synchronize: true,
+      dropSchema: true,
     }),
   };
 }

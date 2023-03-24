@@ -26,22 +26,22 @@ export type EventT = {
   db_time_label: string;
   time_label_utc: string;
   comment: string;
-  segment_id: number;
-  segment_name: string;
-  cars: string;
+  segment_id: number; //?
+  segment_name: string; //?
+  cars: string; //?
   device_name: string;
   device_id: number;
   device_zone_id: number;
 };
 
-type UserT = {
+export type UserT = {
   fio: string;
   division_name: string; //отдел
   division: number;
   user_name: string;
   user_id: number;
   position_name: string; //должность
-  position: number;
-  identifier: number; //номер идентификатора карты // 6/43
+  position: number; //id должности
+  identifier: string; //номер идентификатора карты // 6/43
   tabel_number: string; //табельный номер
 };

@@ -1,60 +1,31 @@
-import {
-  Column,
-  CreateDateColumn,
-  Entity,
-  JoinColumn,
-  OneToOne,
-  PrimaryGeneratedColumn,
-  UpdateDateColumn,
-} from 'typeorm';
+import { Column, Entity, OneToOne } from 'typeorm';
+import { AEntity } from './a.entity';
 import { ReportEntity } from './report.entity';
-enum EventList {
+
+export enum EventList {
   getOut,
   comeIn,
 }
 @Entity({ name: 'user' })
-export class UserEntity {
-  @PrimaryGeneratedColumn()
-  id: number;
-
-  @Column()
+export class UserEntity extends AEntity {
+  @Column({ nullable: true })
   iin: number;
 
-  @Column()
-  personCode: number;
+  @Column({ nullable: true })
+  codeCard: string;
 
   @Column()
-  rfId: number;
+  fio: string;
 
   @Column({ type: 'enum', enum: EventList })
   eventCode: EventList;
 
   @Column()
-  bins: number;
+  turnstileId: number;
 
   @Column()
-  buildingName: string;
+  time: Date;
 
-  @Column()
-  gateNumber: number;
-
-  @Column()
-  floorNumber: number;
-
-  @OneToOne(() => ReportEntity)
-  @JoinColumn()
+  @OneToOne(() => ReportEntity, (report) => report.user)
   report: ReportEntity;
-
-  @CreateDateColumn({
-    type: 'timestamp',
-    default: () => 'CURRENT_TIMESTAMP(6)',
-  })
-  public created: Date;
-
-  @UpdateDateColumn({
-    type: 'timestamp',
-    default: () => 'CURRENT_TIMESTAMP(6)',
-    onUpdate: 'CURRENT_TIMESTAMP(6)',
-  })
-  public updated: Date;
 }

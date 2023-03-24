@@ -1,28 +1,49 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import * as moment from 'moment';
+import { ApiT } from '../types/api.type';
+import { XmlService } from './xml.service';
+import { ReportEntity } from '../db/entities/report.entity';
+import { UserEntity } from '../db/entities/user.entity';
 
 @Injectable()
 export class ApiService {
   private readonly apiURL: string;
   private readonly token: string;
-  constructor(private readonly configService: ConfigService) {
+
+  constructor(
+    private readonly configService: ConfigService,
+    private readonly xmlService: XmlService,
+  ) {
     this.apiURL = configService.get('API_URL');
     this.token = configService.get('PERCO_TOKEN');
   }
 
-  fetchFrom() {
-    return fetch(
+  async fetchFrom() {
+    const dateFromF = new Date('2019-07-18 07:00:00');
+    const dateToF = new Date(dateFromF).setMonth(dateFromF.getMonth() + 1);
+    const dateFrom = moment(dateFromF).format('YYYY-MM-DD hh-mm-ss').trim();
+    const dateTo = moment(dateToF).format('YYYY-MM-DD hh-mm-ss').trim();
+
+    const request = await fetch(
       this.apiURL +
-        '/eventsystem?beginDatetime=2019-03-17 2023:59:59&endDatetime=2023-03-17 2023:59:59&cols=icon_information,event_name,time_label,time_label_utc,res_name,ip_address,device_name,fio,identifier,zone_exit,zone_enter,user_name,category,subcategory,segment_name&sidx=id&page=1&rows=100&filters={"type":"and","rows":[{"column":"event","value":17}]}',
+        `/eventsystem?beginDatetime=${dateFrom}&endDatetime=${dateTo}&cols=icon_information,ip_address,fio,device,identifier,zone_exit,zone_enter,user_name,segment_name&sidx=id&page=1&rows=500&filters={"type":"and","rows":[{"column":"event","value":17}]}`,
       {
         headers: {
           Authorization: `Bearer ${this.token}`,
         },
       },
     );
+    if (request.status > 299) {
+      throw new HttpException(request.statusText, request.status);
+    }
+    return JSON.parse(await request.text()) as unknown as ApiT;
   }
 
-  fetchTo() {}
+  fetchTo(payload: ReportEntity[]) {
+    const file: string = this.xmlService.generate(payload);
+    return file;
+  }
 }
 
 //https://ru.percoweb.com/api/eventsystem?

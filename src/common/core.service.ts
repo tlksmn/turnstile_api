@@ -1,29 +1,26 @@
 import { Injectable } from '@nestjs/common';
 import { ApiService } from './api.service';
-import { XmlService } from './xml.service';
-import { InjectRepository } from '@nestjs/typeorm';
-import { UserEntity } from '../db/entities/user.entity';
-import { Repository } from 'typeorm';
-import { ReportEntity } from '../db/entities/report.entity';
+import { ApiT } from '../types/api.type';
+import { DataService } from './data.service';
 
 @Injectable()
 export class CoreService {
   constructor(
     private readonly apiService: ApiService,
-    private readonly xmlService: XmlService,
-    @InjectRepository(UserEntity)
-    private readonly userRepository: Repository<UserEntity>,
-    @InjectRepository(ReportEntity)
-    private readonly reportRepository: Repository<ReportEntity>,
+    private readonly dataService: DataService,
   ) {}
 
-  getData() {
-    return this.apiService.fetchFrom();
-    //save data in db and make report to him
+  async getData() {
+    const events: ApiT = await this.apiService.fetchFrom();
+    const temp = await this.dataService.saveData(events);
+    console.log(temp.length);
   }
 
-  sentData() {
-    return this.apiService.fetchTo();
-    //get data from db and change report status
+  async sentData() {
+    const data = await this.dataService.getDate();
+    const xml = this.apiService.fetchTo(data);
+    console.log(data.length);
+    await this.dataService.update(data);
+    console.log(xml.length);
   }
 }

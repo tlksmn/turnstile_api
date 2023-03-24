@@ -1,30 +1,13 @@
-import {
-  CreateDateColumn,
-  Entity,
-  OneToOne,
-  PrimaryGeneratedColumn,
-  UpdateDateColumn,
-} from 'typeorm';
+import { Column, Entity, JoinColumn, OneToOne } from 'typeorm';
+import { AEntity } from './a.entity';
 import { UserEntity } from './user.entity';
 
 @Entity({ name: 'report' })
-export class ReportEntity {
-  @PrimaryGeneratedColumn()
-  id: number;
+export class ReportEntity extends AEntity {
+  @Column()
+  delivered: boolean;
 
   @OneToOne(() => UserEntity, (user) => user.report)
+  @JoinColumn()
   user: UserEntity;
-
-  @CreateDateColumn({
-    type: 'timestamp',
-    default: () => 'CURRENT_TIMESTAMP(6)',
-  })
-  public created: Date;
-
-  @UpdateDateColumn({
-    type: 'timestamp',
-    default: () => 'CURRENT_TIMESTAMP(6)',
-    onUpdate: 'CURRENT_TIMESTAMP(6)',
-  })
-  public updated: Date;
 }

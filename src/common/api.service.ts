@@ -2,19 +2,13 @@ import { HttpException, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import * as moment from 'moment';
 import { ApiT } from '../types/api.type';
-import { XmlService } from './xml.service';
-import { ReportEntity } from '../db/entities/report.entity';
-import { UserEntity } from '../db/entities/user.entity';
 
 @Injectable()
 export class ApiService {
   private readonly apiURL: string;
   private readonly token: string;
 
-  constructor(
-    private readonly configService: ConfigService,
-    private readonly xmlService: XmlService,
-  ) {
+  constructor(private readonly configService: ConfigService) {
     this.apiURL = configService.get('API_URL');
     this.token = configService.get('PERCO_TOKEN');
   }
@@ -40,9 +34,8 @@ export class ApiService {
     return JSON.parse(await request.text()) as unknown as ApiT;
   }
 
-  fetchTo(payload: ReportEntity[]) {
-    const file: string = this.xmlService.generate(payload);
-    return file;
+  fetchTo(xml: string) {
+    return fetch('');
   }
 }
 

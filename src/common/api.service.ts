@@ -7,10 +7,12 @@ import { ApiT } from '../types/api.type';
 export class ApiService {
   private readonly apiURL: string;
   private readonly token: string;
+  private readonly eqizmetURL: string;
 
   constructor(private readonly configService: ConfigService) {
     this.apiURL = configService.get('API_URL');
     this.token = configService.get('PERCO_TOKEN');
+    this.eqizmetURL = configService.get('EQIZMET_URL');
   }
 
   async fetchFrom() {

@@ -2,6 +2,19 @@
 ```bash
 node -v #-> 18.4.5
 ```
+
+клонируем репозиторий (можно скачать как архив; потом убедитесь что находитесь в директории проекта)
+```bash
+git clone https://github.com/tlksmn/turnstile_api
+```
+заходим в директорию где лежит исходный код
+```bash
+cd turnstile_api
+```
+проверяем в нужную ли директорию мы зашли
+```bash
+ls #->  src/    test/ .env   .eslintrc.js   .gitignore  ....    package.json     ....
+```
 запустить в консоли, установив зависимости npm install
 ```bash
 npm install

@@ -15,9 +15,9 @@ export class CoreService {
   async getData() {
     try {
       const events: ApiT = await this.apiService.fetchFrom();
-      Logger.log(`получено ${events.records} данных`);
+      Logger.log('получено ' + events.records + ' данных');
       const temp = await this.dataService.saveData(events);
-      Logger.log(`сохранено ${temp.length}`);
+      Logger.log('сохранено ' + temp.length);
     } catch (e) {
       Logger.log(e);
       Logger.log('ошибка во время получения данных');
@@ -30,7 +30,7 @@ export class CoreService {
       Logger.log('нет записей в базе данных');
       return null;
     }
-    Logger.log(data.length, ' записей было получено для xml');
+    Logger.log(data.length + ' записей было получено для xml');
     const xml = this.xmlService.generate(data);
     try {
       const request = await this.apiService.fetchTo(xml);

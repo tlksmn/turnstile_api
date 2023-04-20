@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { ApiService } from './api.service';
 import { ApiT } from '../types/api.type';
 import { DataService } from './data.service';
@@ -13,21 +13,32 @@ export class CoreService {
   ) {}
 
   async getData() {
-    const events: ApiT = await this.apiService.fetchFrom();
-    const temp = await this.dataService.saveData(events);
-    console.log('сохранено ', temp.length);
+    try {
+      const events: ApiT = await this.apiService.fetchFrom();
+      Logger.log('получено ', events.records, ' данных');
+      const temp = await this.dataService.saveData(events);
+      Logger.log('сохранено ', temp.length);
+    } catch (e) {
+      Logger.log(e);
+      Logger.log('ошибка во время получения данных');
+    }
   }
 
   async sentData() {
     const data = await this.dataService.getDate();
+    if (data.length === 0) {
+      Logger.log('нет записей в базе данных');
+      return null;
+    }
+    Logger.log(data.length, ' записей было получено для xml');
     const xml = this.xmlService.generate(data);
     try {
       const request = await this.apiService.fetchTo(xml);
-      console.log(request);
+      Logger.log(request);
       await this.dataService.update(data);
     } catch (e) {
-      console.log(e);
+      Logger.log(e);
+      Logger.log('ошибка во время отправки данных в eqizmet');
     }
-    console.log(xml.length);
   }
 }

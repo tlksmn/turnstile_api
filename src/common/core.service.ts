@@ -17,7 +17,7 @@ export class CoreService {
       const events: ApiT = await this.apiService.fetchFrom();
       Logger.log('получено ' + events.records + ' данных');
       const temp = await this.dataService.saveData(events);
-      Logger.log('сохранено ' + temp.length);
+      Logger.log('сохранено ' + temp.length + ' данных');
     } catch (e) {
       Logger.log(e);
       Logger.log('ошибка во время получения данных');

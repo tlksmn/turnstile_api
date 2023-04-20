@@ -6,12 +6,12 @@ import { CoreService } from './common/core.service';
 export class AppService {
   constructor(private readonly coreService: CoreService) {}
 
-  @Cron(CronExpression.EVERY_10_SECONDS)
+  @Cron(CronExpression.EVERY_MINUTE)
   async getDataFromPerco() {
     await this.coreService.getData();
   }
 
-  @Cron(CronExpression.EVERY_30_SECONDS)
+  @Cron(CronExpression.EVERY_MINUTE)
   async sendDataToServer() {
     await this.coreService.sentData();
   }

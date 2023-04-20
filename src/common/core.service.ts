@@ -15,7 +15,7 @@ export class CoreService {
   async getData() {
     const events: ApiT = await this.apiService.fetchFrom();
     const temp = await this.dataService.saveData(events);
-    console.log(temp.length);
+    console.log('сохранено ', temp.length);
   }
 
   async sentData() {

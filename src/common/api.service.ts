@@ -16,8 +16,8 @@ export class ApiService {
   }
 
   async fetchFrom() {
-    const dateFromF = new Date('2019-07-18 07:00:00');
-    const dateToF = new Date(dateFromF).setMonth(dateFromF.getMonth() + 1);
+    const dateFromF = new Date();
+    const dateToF = new Date(dateFromF).setMonth(dateFromF.getMinutes() - 1);
     const dateFrom = moment(dateFromF).format('YYYY-MM-DD hh-mm-ss').trim();
     const dateTo = moment(dateToF).format('YYYY-MM-DD hh-mm-ss').trim();
 
